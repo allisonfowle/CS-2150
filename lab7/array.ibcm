@@ -1,0 +1,74 @@
+C00A 000	jmp 	start 	skip around the variables
+0000 001 s 	dw 	0 	int s (size of array)
+003C 002 a 	dw 	0 	int a[] defined at the bottom
+0000 003 i	dw	0	int i (iterator)
+0000 004 zero	dw	0	
+4000 005 adit	dw	4000	to store ints in array
+3000 006 loadit dw	3000	to load the printed values
+0001 007 one	dw	1
+0000 008 
+0000 009 
+1000 00A start 	readH 		read array size
+4001 00B 	store 	s	store into size
+3004 00C	load	zero	prepare 0 
+4003 00D	store 	i	i = 0; 
+3001 00E loop	load 	s	prepare s
+6003 00F 	sub	i 	s -= i;	
+E01C 010 	jmpl	print   if(i >= s) goto print
+D01C 011 	jmpe 	print 	
+3005 012 	load 	adit 	form the instruction to add a[i]
+5002 013 	add 	a	add a's address to adit
+5003 014 	add 	i	add index
+4017 015 	store 	doit 	plant the instruction into the program
+1000 016 	readH 	 	read user input
+0000 017 doit 	dw 	0	used to store user input
+3003 018 	load 	i 	i += 1
+5007 019 	add 	one	
+4003 01A 	store 	i	update i
+C00E 01B 	jmp 	loop 	goto loop
+3004 01C print  load 	zero	prepare 0
+4003 01D	store	i	save to i
+3001 01E loop2	load	s	prepare size
+6003 01F	sub	i	s -= i
+E02C 020	jmpl	print2	if(i >= s) goto print2
+D02C 021	jmpe	print2
+3006 022	load	loadit	stores printed values	
+5002 023	add	a	add value at index
+5003 024	add	i
+4026 025	store	redo	store value
+0000 026 redo	dw 	0
+1800 027	print	redo	print value forwards
+3003 028	load	i	reload i 
+5007 029	add	one	i+=1
+4003 02A	store	i	save i
+C01E 02B	jmp	loop2	go to loop2
+3001 02C print2	load	s	reload size of array
+6007 02D	sub	one	subtract one (account for range)
+4003 02E	store 	i	save into i
+3003 02F loop3	load	i	load i
+E03B 030	jmpl	exit	if i<0 go to exit
+3006 031	load 	loadit	load the values
+5002 032	add	a	update addresses 
+5003 033	add 	i	
+4035 034	store	printa	save value
+0000 035 printa	dw	0	
+1800 036	print	printa	print value backwards
+3003 037	load	i	reload i
+6007 038	sub	one	subtract 1
+4003 039	store	i	i-=1
+C02F 03A	jmp	loop3	go back to loop3
+0000 03B exit	halt		exit program
+0000 03C a[]	dw	0	int a[]	
+
+
+
+
+C00A 000			jmp 	start 	skip around the variables
+0000 001 	n 		dw 		0 	 	n = 0
+003C 002 	a 		dw 		0 		int a[] @ 008
+0000 003 	i		dw		0		i iterator
+0000 004 	zero	dw		0	
+4000 005 	one		dw		1
+3000 006 	loadit 	dw		3000	to load the printed values
+0001 007 	adit	dw		4000	to store ints in array
+0000 008 	a[]		dw		0		int a[]	

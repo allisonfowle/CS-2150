@@ -1,0 +1,127 @@
+C011 000	jmp 	start 	skip around the variables
+000A 001 s 	dw 	0 	int s (size)
+007D 002 a 	dw 	0 	int a[] defined at the bottom
+0000 003 i	dw	0	int i (iterator)
+0000 004 zero	dw	0	
+4000 005 adit	dw	4000	to store ints in array
+3000 006 loadit dw	3000	to load the printed values
+0001 007 one	dw	1
+0000 008 curr	dw	0	current index
+0000 OO9 prev	dw	0	previous index
+0000 00A j 	dw	9	inner loop starts at the next to last index		
+0000 00B temp	dw	0	
+0000 00C temp2	dw 	0			
+0000 00D 
+0000 00E
+0000 00F
+0000 010		 	
+3004 011 start	load	zero	prepare 0 
+4003 012	store 	i	i = 0; 
+3001 013 loop	load 	s	prepare s
+6003 014	sub	i 	s -= i;	
+E021 015	jmpl	outerL   	
+D021 016 	jmpe 	outerL 	
+3005 017	load 	adit 	form the instruction to add a[i]
+5002 018	add 	a	add a's address to adit
+5003 019	add 	i	add index
+401C 01A	store 	doit 	plant the instruction into the program
+1000 01B	readH 	 	read user input
+0000 01C doit 	dw 	0	used to store user input
+3003 01D	load 	i 	i += 1
+5007 01E 	add 	one	
+4003 01F	store 	i	update i
+C013 020	jmp 	loop 	goto loop
+3004 021 outerL	load 	zero
+4003 022	store 	i
+3001 023	load 	s	determine if i > size
+6003 024	sub 	i 
+E06C 025	jmpl 	print	goto print
+D06C 026	jmpe 	print
+3001 027	load	s
+6007 028	sub	one
+400A 029	store	j	inside loop: exit if i > j
+300A 02A innerL	load	j	
+6003 02B	sub 	i
+E065 02C	jmpl 	exitIn	exit the inside loop
+D065 02D	jmpe 	exitIn
+3006 02E	load 	loadit	add a and j to accumulator
+5002 02F	add 	a
+500A 030	add 	j
+4032 031 	store 	doit1	store value in doit1
+0000 032 doit1 	dw 	0
+4008 033	store 	curr	store value in curr
+3006 034	load 	loadit	load value of prev num
+5002 035	add 	a
+500A 036	add 	j
+6007 037	sub 	one
+4039 038	store 	doit2	store in doit2
+0000 039 doit2 	dw	 0
+4009 03A	store 	prev	store in prev
+3008 03B	load 	curr	curr - prev
+6009 03C	sub 	prev
+E040 03D	jmpl 	swap	if curr > prev jmpl swap
+C061 03E	jmp	dec	we must decrement j even if we dont swap
+C065 03F	jmp 	exitIn	exit inner loop
+3006 040 swap	load 	loadit	load the acc
+5002 041	add 	a	add a[j]
+500A 042	add 	j
+4044 043	store 	index	save the index
+0000 044 index	dw	0
+400B 045	store	temp	store into temp
+4008 046	store	curr	and current
+3006 047	load 	loadit	load acc
+5002 048	add 	a	a[j-1]
+500A 049	add 	j
+6007 04A	sub	one	
+404C 04B	store 	index2	store index
+0000 04C index2	dw	0
+4008 04D	store	curr	into current 
+300B 04E	load	temp	load temp value
+4009 04F	store	prev	save it as prev
+3005 050	load	adit	load add acc
+5002 051	add 	a	current = a[j]	
+500A 052	add 	j
+4055 053	store 	cin	save into current index
+3008 054	load	curr
+0000 055 cin	dw	0
+3005 056	load	adit	load acc
+5002 057	add 	a	a[j-1]	
+500A 058	add 	j
+6007 059	sub	one
+405C 05A	store 	pin	save into prev index
+3009 05B	load	prev
+0000 05C pin	dw	0	
+300A 05D	load 	j	load the iterator j
+6007 05E	sub 	one	decrement
+400A 05F	store 	j	save
+C02A 060	jmp 	innerL	go to next num in array
+300A 061 dec	load	j	decremented function 
+6007 062	sub	one	j--
+400A 063	store	j
+C02A 064	jmp	innerL	go to next num in array
+3003 065 exitIn	load 	i	load the iterator
+5007 066	add 	one	i++
+4003 067	store 	i	
+3001 068	load 	s	load the size
+6007 069	sub 	one	subtract one
+400A 06A	store 	j	save as j
+C023 06B	jmp 	outerL	
+3004 06C print	load	zero	reinitialize iterator
+4003 06D 	store	i	save to i
+3001 06E loop2	load	s	prepare size
+6003 06F	sub	i	s -= i
+E07C 070	jmpl	exit	if(i >= s) goto print2
+D07C 071	jmpe	exit
+3006 072	load	loadit	stores printed values
+5002 073	add	a	add value at index
+5003 074	add	i
+4076 075	store	redo	store value
+0000 076 redo	dw 	0
+1800 077	print	redo	print value forwards
+3003 078	load	i	reload i 
+5007 079	add	one	i+=1
+4003 07A	store	i	save i
+C06E 07B	jmp	loop2	go to loop2
+0000 07C 	exit	halt	exit program
+0000 07D a[]	dw	0	int a[]	
+

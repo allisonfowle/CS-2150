@@ -1,0 +1,97 @@
+C00E 000			jmp  	start   skip around the variables 
+0060 001 	a[]		dw  	0 	int a[]
+000A 002 	size  	dw  	10  	size = 10
+0000 003 	i  		dw  	0 		i = 0
+0000 004 	j  		dw  	0 		j = 0
+0000 005 	zero  	dw  	0 		
+0001 006 	one  	dw  	1
+4000 007 	addit	dw		4000 
+3000 008 	loadit	dw  	3000 
+0000 009 	pos 	dw 		0      	a[k] in bubblesort.cpp
+0000 00A 	prev 	dw 		0    	a[k-1] in bubblesort.cpp
+B000 00B       
+B000 00C   
+B000 00D      
+3005 00E  	start	load  	zero    
+4003 00F  			store	i 		i = 0
+4004 010  			store   j 		j = 0
+3002 011 	loop1   load  	size  	if (j >= size) goto: sort
+6004 012  			sub   	j 		acc -= j
+E01F 013  			jmpl    loop2
+D01F 014  			jmpe    loop2
+3007 015  			load  	addit 	store 4000 command to array
+5001 016  			add  	a 		addit += a
+5004 017  			add 	j 		addit += j
+401A 018  			store   exec   	execute
+1000 019  			readH   pos    	input 
+0000 01A	exec	dw  	0
+3004 01B  			load    j  
+5006 01C  			add  	one 	
+4004 01D  			store   j 		j -= 1
+C011 01E  			jmp  	loop1		
+3002 01F  	loop2	load  	size  	if (i >= size) goto: print 
+6003 020  			sub     i 		size -= i
+E04F 021  			jmpl    print
+D04F 022  			jmpe    print
+3002 023  			load  	size
+6006 024  			sub     one 	size - 1 = 9
+4004 025  			store	j 		j = 9
+3004 026 	loop3   load    j  		(int j = MAX - 1; j > i; j--) 
+6003 027  			sub  	i 		j--
+E03D 028  			jmpl    loop5
+D03D 029  			jmpe    loop5
+3008 02A  			load    loadit  load 3000 command
+5001 02B  			add     a     	loadit += a
+5004 02C  			add     j       loadit += j
+6006 02D  			sub	    one 	a[j-1]
+402F 02E  			store   exec
+0000 02F  	exec	dw 		0 		execute
+400A 030  			store   prev 	a[k-1]
+3008 031  			load    loadit 
+5001 032  			add     a 		loadit += a
+5004 033  			add     j 		a[j]
+4035 034  			store 	exec
+0000 035    exec  	dw  	0 		execute
+4009 036  			store   pos 	a[k]
+600A 037  			sub     prev 	a[k] - a[k-1]
+E041 038    		jmpl    switch
+3004 039  	loop4	load    j
+6006 03A  			sub     one 	
+4004 03B  			store   j 		j -= 1
+C01F 03C    		jmp     loop2
+3003 03D 	loop5	load 	i
+5006 03E 			add     one
+4003 03F 			store   i 		i += 1
+C01F 040 			jmp     loop2
+3007 041  	switch	load  	addit 
+5001 042  			add     a     	addit += a
+5004 043  			add  	j 		a[j]
+4046 044  			store 	exec
+300A 045  			load  	prev 	a[k-1]
+0000 046  	exec 	dw 		0   	pos = prev
+3007 047  			load  	addit
+5001 048 			add 	a 		addit += a
+5004 049 			add  	j 		addit += j
+6006 04A 			sub   	one 	addit - 1
+404D 04B 			store 	exec
+3009 04C 			load  	pos 	a[k]
+0000 04D  	exec 	dw 		0   	prev = pos
+C039 04E 			jmp     loop4
+3005 04F  	print	load  	zero  	
+4004 050  			store 	j 		j = 0
+3002 051 	loop6	load 	size  	if(j >= size) goto: xit
+6004 052  			sub  	j 		size - j
+E05F 053 			jmpl 	xit
+D05F 054  			jmpe 	xit
+3008 055 			load  	loadit
+5001 056 			add  	a 		loadit += a
+5004 057 			add  	j 		loadit += j
+4059 058 			store 	exec
+0000 059 	exec 	dw 		0
+1800 05A  			printH 	pos 	a[k] iterations
+3004 05B  			load  	j   
+5006 05C  			add  	one   	
+4004 05D  			store 	j 		j += 1
+C051 05E  			jmp     loop6
+0000 05F 	xit		halt
+0000 060 	a[]		dw 		0
