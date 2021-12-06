@@ -1,0 +1,61 @@
+C00A 000			jmp 	start 	skip around the variables
+0000 001 	n 		dw 		0 	 	n = 0
+0008 002 	a 		dw 		0 		int a[] array
+0000 003 	i		dw		0		i iterator = 0
+0000 004 	zero	dw		0	
+0001 005 	one		dw		1
+3000 006 	loadit 	dw		3000	to load values
+4000 007 	addit	dw		4000	to store in array
+0000 008 	a[] 	dw 		0 
+0000 009 
+1000 00A 	start 	readH 			
+4001 00B 			store 	n		
+3004 00C			load	zero	
+4003 00D			store 	i		
+3001 00E 	loop1	load 	n		
+6003 00F 			sub		i 		 n -= i	
+E01C 010 			jmpl	print1   if(i >= n) goto: print
+D01C 011 			jmpe 	print1 	 
+3007 012 			load 	addit 	
+5002 013 			add 	a		
+5003 014 			add 	i		
+4017 015 			store 	exec 	
+1000 016 			readH 	 	
+0000 017 	exec 	dw 		0		
+3003 018 			load 	i 		i += 1
+5005 019 			add 	one	
+4003 01A 			store 	i		
+C00E 01B 			jmp 	loop1	goto: loop1
+3004 01C 	print1 	load 	zero	
+4003 01D			store	i		
+3001 01E 	loop2	load	n		
+6003 01F			sub		i		n -= i
+E02C 020			jmpl	print2	if(i >= n) goto: print2
+D02C 021			jmpe	print2
+3006 022			load	loadit		
+5002 023			add		a		
+5003 024			add		i
+4026 025			store	redo	
+0000 026 	forw	dw 		0
+1800 027			print	forw	print value forwards
+3003 028			load	i		reload i 
+5005 029			add		one		i += 1
+4003 02A			store	i		save i
+C01E 02B			jmp		loop2	goto: loop2
+3001 02C 	print2	load	n		
+6005 02D			sub		one	
+4003 02E			store 	i	
+3003 02F 	loop3	load	i		load i
+E03B 030			jmpl	xit		if (i < 0) goto: xit
+3006 031			load 	loadit	load the values
+5002 032			add		a		update addresses 
+5003 033			add 	i	
+4035 034			store	back	save value
+0000 035 	back	dw		0	
+1800 036			print	back	print value backwards
+3003 037			load	i		
+6005 038			sub		one		subtract 1
+4003 039			store	i		i -= 1
+C02F 03A			jmp		loop3	goto: loop3
+0000 03B 	xit		halt
+		

@@ -1,0 +1,25 @@
+C00A 000 			jmp 	start	skip around the variables
+0018 001	size	dw 		0 		size of program
+0001 002	one		dw 		1 		
+0000 003 	zero 	dw 		0
+0000 004 	i 		dw 		0 		i = 0
+0000 005	temp 	dw 		0 		temp = 0, variable in case
+3000 006 	loadit 	dw		3000
+0000 007
+0000 008
+0000 009
+3003 00A 	start	load 	zero
+4004 00B 			store 	i
+3001 00C 	loop	load 	size
+6004 00D 			sub 	i 		iterator
+D018 00E 			jmpe 	xit 	if (i > size) goto: xit
+3006 00F			load 	loadit 		
+5004 010 			add		i		loadit + i
+4012 011			store 	exec 	execute 
+0000 012 	exec	dw 		0
+1800 013			printH
+3004 014			load 	i 		
+5002 015 			add 	one 	i++
+4004 016			store 	i 		
+C00C 017	end		jmp 	loop
+0000 018			halt
